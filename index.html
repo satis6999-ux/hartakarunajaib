@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARAH HARTA AJAIB4D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-black via-gray-900 to-black min-h-screen overflow-x-hidden">
+
+<div id="app" class="min-h-screen flex items-center justify-center p-4"></div>
+
+<script>
+/* =============================
+   DATA & STATE
+============================= */
+const prizes = [
+    { value: 'Rp 100.000', icon: '💸' },
+    { value: 'Rp 150.000', icon: '💸' },
+    { value: 'Rp 200.000', icon: '💸' },
+    { value: 'Rp 500.000', icon: '💸' }
+];
+
+let stage = 'input';
+let userId = localStorage.getItem("USER_ID") || '';
+let claimedUsers = [];
+
+/* =============================
+   RENDER INPUT USER ID
+============================= */
+function renderInput() {
+    return `
+        <div class="bg-gradient-to-br from-gray-800 to-black rounded-3xl p-8 shadow-2xl max-w-md w-full border-4 border-yellow-500 text-center">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-4">Masukkan User ID</h2>
+            <input id="userIdInput" value="${userId}" placeholder="Contoh: user_***88"
+                class="w-full px-5 py-4 rounded-xl mb-4 bg-gray-900 text-white border-2 border-yellow-500">
+            <div id="errorMsg" class="hidden text-red-400 mb-4"></div>
+            <button id="continueBtn"
+                class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-4 rounded-xl text-xl">
+                Lanjutkan
+            </button>
+        </div>
+    `;
+}
+
+/* =============================
+   RENDER BOX
+============================= */
+function renderBoxSelection() {
+    let boxes = '';
+    for (let i = 0; i < 9; i++) {
+        boxes += `
+            <button class="box-btn bg-yellow-500 aspect-square rounded-xl text-4xl font-bold">
+                ⚔️
+            </button>
+        `;
+    }
+    return `
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6">Pilih 1 Box</h2>
+            <div class="grid grid-cols-3 gap-4">${boxes}</div>
+        </div>
+    `;
+}
+
+/* =============================
+   RENDER RESULT (USER ID AMAN)
+============================= */
+function renderResult(prize) {
+    const uid = localStorage.getItem("USER_ID") || "Unknown";
+
+    return `
+        <div class="bg-gradient-to-br from-gray-800 to-black rounded-3xl p-8 shadow-2xl max-w-md w-full border-4 border-yellow-500 text-center relative">
+
+            <div class="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-xl font-bold">
+                User ID: ${uid}
+            </div>
+
+            <div class="text-8xl mb-4">${prize.icon}</div>
+            <h2 class="text-4xl font-bold text-yellow-400 mb-4">SELAMAT 🎉</h2>
+
+            <div class="bg-yellow-500 text-black py-4 rounded-xl mb-6 text-3xl font-bold">
+                ${prize.value}
+            </div>
+
+            <button id="resetBtn"
+                class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl">
+                Kembali
+            </button>
+        </div>
+    `;
+}
+
+/* =============================
+   MAIN RENDER
+============================= */
+function render() {
+    const app = document.getElementById("app");
+
+    if (stage === 'input') {
+        app.innerHTML = renderInput();
+        document.getElementById("continueBtn").onclick = () => {
+            const input = document.getElementById("userIdInput").value.trim();
+            const err = document.getElementById("errorMsg");
+
+            if (!input) {
+                err.textContent = "User ID wajib diisi!";
+                err.classList.remove("hidden");
+                return;
+            }
+
+            userId = input;
+            localStorage.setItem("USER_ID", userId);
+            stage = 'select';
+            render();
+        };
+
+    } else if (stage === 'select') {
+        app.innerHTML = renderBoxSelection();
+        document.querySelectorAll(".box-btn").forEach(btn => {
+            btn.onclick = () => {
+                const prize = prizes[Math.floor(Math.random() * prizes.length)];
+                stage = 'result';
+                app.innerHTML = renderResult(prize);
+
+                document.getElementById("resetBtn").onclick = () => {
+                    localStorage.removeItem("USER_ID");
+                    userId = '';
+                    stage = 'input';
+                    render();
+                };
+            };
+        });
+    }
+}
+
+render();
+</script>
+
+</body>
+</html>
