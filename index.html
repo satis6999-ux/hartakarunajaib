@@ -322,23 +322,27 @@
                 app.innerHTML = renderInput();
                 document.getElementById('continueBtn').onclick = () => {
                     playSound('click');
-                    userId = document.getElementById('userIdInput').value;
+                    const inputValue = document.getElementById('userIdInput').value.trim();
                     const errorMsg = document.getElementById('errorMsg');
                     
-                    if (!userId.trim()) {
+                    if (!inputValue) {
                         errorMsg.textContent = '⚠️ Silahkan masukkan User ID Anda!';
                         errorMsg.classList.remove('hidden');
                         return;
                     }
                     
-                    if (claimedUsers.includes(userId.trim().toLowerCase())) {
+                   if (claimedUsers.includes(inputValue.toLowerCase())) {
                         errorMsg.textContent = '⚠️ User ID ini sudah pernah mengklaim hadiah!';
                         errorMsg.classList.remove('hidden');
                         return;
                     }
                     
-                    stage = 'select';
-                    render();
+                   // ✅ SIMPAN USER ID (INI KUNCI MASALAH "Unknown")
+                        userId = inputValue;
+                        localStorage.setItem("USER_ID", userId);
+                    
+                        stage = 'select';
+                        render();
                 };
             } else if (stage === 'select') {
                 app.innerHTML = renderBoxSelection();
