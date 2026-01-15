@@ -75,14 +75,6 @@
         </div>
     </button>
 
-    <!-- WhatsApp Button -->
-    <button id="whatsappBtn" class="fixed bottom-6 left-6 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-3 px-5 rounded-full shadow-2xl z-20 transition transform hover:scale-110 animate-bounce-chat border-2 border-green-400" style="animation-delay: 0.5s">
-        <div class="flex flex-col items-center gap-1">
-            <span class="text-2xl">☏</span>
-            <span class="text-xs whitespace-nowrap">WHATSAPP</span>
-        </div>
-    </button>
-
     <!-- Main Container -->
     <div id="app" class="min-h-screen flex items-center justify-center p-4 pt-20"></div>
 
@@ -105,8 +97,6 @@
     </div>
 
     <script>
-        // GANTI NOMOR WHATSAPP DI SINI
-        const WHATSAPP_NUMBER = '6287785520155';
         
         const prizes = [
             { name: 'Saldo 100rb', value: 'Rp 100.000', icon: '💳' },
@@ -332,30 +322,23 @@
                 app.innerHTML = renderInput();
                 document.getElementById('continueBtn').onclick = () => {
                     playSound('click');
-                    document.getElementById('continueBtn').onclick = () => {
-    playSound('click');
-
-    const inputValue = document.getElementById('userIdInput').value.trim();
-    const errorMsg = document.getElementById('errorMsg');
-
-    if (!inputValue) {
-        errorMsg.textContent = '⚠️ Silahkan masukkan User ID Anda!';
-        errorMsg.classList.remove('hidden');
-        return;
-    }
-
-    if (claimedUsers.includes(inputValue.toLowerCase())) {
-        errorMsg.textContent = '⚠️ User ID ini sudah pernah mengklaim hadiah!';
-        errorMsg.classList.remove('hidden');
-        return;
-    }
-
-    // 🔑 SIMPAN USER ID (INI INTI MASALAH)
-    userId = inputValue;
-    localStorage.setItem("USER_ID", userId);
-
-    stage = 'select';
-    render();
+                    userId = document.getElementById('userIdInput').value;
+                    const errorMsg = document.getElementById('errorMsg');
+                    
+                    if (!userId.trim()) {
+                        errorMsg.textContent = '⚠️ Silahkan masukkan User ID Anda!';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    if (claimedUsers.includes(userId.trim().toLowerCase())) {
+                        errorMsg.textContent = '⚠️ User ID ini sudah pernah mengklaim hadiah!';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    stage = 'select';
+                    render();
                 };
             } else if (stage === 'select') {
                 app.innerHTML = renderBoxSelection();
@@ -384,9 +367,8 @@
                             };
                             document.getElementById('resetBtn').onclick = () => {
                                 playSound('click');
-                               localStorage.removeItem("USER_ID");
-                                userId = '';
                                 stage = 'welcome';
+                                userId = '';
                                 render();
                             };
                         }, 1500);
@@ -421,11 +403,6 @@
         document.getElementById('liveChatBtn').onclick = () => {
             playSound('click');
             window.open('https://static.zdassets.com/web_widget/latest/liveChat.html?v=10#key=hokiajaib4d.zendesk.com&settings=JTdCJTIyd2ViV2lkZ2V0JTIyJTNBJTdCJTIyY2hhdCUyMiUzQSU3QiUyMnRpdGxlJTIyJTNBbnVsbCUyQyUyMm1lbnVPcHRpb25zJTIyJTNBJTdCJTIyZW1haWxUcmFuc2NyaXB0JTIyJTNBdHJ1ZSU3RCUyQyUyMmRlcGFydG1lbnRzJTIyJTNBJTdCJTdEJTJDJTIycHJlY2hhdEZvcm0lMjIlM0ElN0IlMjJkZXBhcnRtZW50TGFiZWwlMjIlM0FudWxsJTJDJTIyZ3JlZXRpbmclMjIlM0FudWxsJTdEJTJDJTIyb2ZmbGluZUZvcm0lMjIlM0ElN0IlMjJncmVldGluZyUyMiUzQW51bGwlN0QlMkMlMjJjb25jaWVyZ2UlMjIlM0ElN0IlMjJhdmF0YXJQYXRoJTIyJTNBbnVsbCUyQyUyMm5hbWUlMjIlM0FudWxsJTJDJTIydGl0bGUlMjIlM0FudWxsJTdEJTdEJTJDJTIyY29sb3IlMjIlM0ElN0IlMjJhcnRpY2xlTGlua3MlMjIlM0ElMjIlMjIlMkMlMjJidXR0b24lMjIlM0ElMjIlMjIlMkMlMjJoZWFkZXIlMjIlM0ElMjIlMjIlMkMlMjJsYXVuY2hlciUyMiUzQSUyMiUyMiUyQyUyMmxhdW5jaGVyVGV4dCUyMiUzQSUyMiUyMiUyQyUyMnJlc3VsdExpc3RzJTIyJTNBJTIyJTIyJTJDJTIydGhlbWUlMjIlM0FudWxsJTdEJTdEJTdE&&locale=en-US&title=Web%20Widget%20Live%20Chat');
-        };
-
-        document.getElementById('whatsappBtn').onclick = () => {
-            playSound('click');
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank');
         };
 
         document.getElementById('closePrizeModal').onclick = () => {
